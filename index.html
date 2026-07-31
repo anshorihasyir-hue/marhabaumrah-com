@@ -460,146 +460,79 @@
             font-size: 14.5px;
             line-height: 1.75;
         }
-        /* ==================== PRIVATE UMRAH ==================== */
-        .private-section {
-            padding: 110px 0;
-            background: var(--cream);
-        }
-        .private-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 80px;
-            align-items: center;
-        }
-        .private-image {
-            position: relative;
-            border-radius: 24px;
-            overflow: hidden;
-            aspect-ratio: 4/5;
-        }
-        .private-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .private-image-badge {
-            position: absolute;
-            bottom: 24px;
-            left: 24px;
-            padding: 12px 22px;
-            background: rgba(15, 43, 35, 0.85);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            color: white;
-            font-size: 13px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .private-image-badge i {
-            color: var(--gold);
-        }
-        .private-content {
-            padding-right: 20px;
-        }
-        .private-features {
-            margin-top: 36px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .private-feature {
-            display: flex;
-            gap: 18px;
-            align-items: flex-start;
-        }
-        .private-feature-icon {
-            width: 44px;
-            height: 44px;
-            min-width: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--white);
-            border-radius: 12px;
-            color: var(--gold);
-            font-size: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-        }
-        .private-feature h4 {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--dark-green);
-            margin-bottom: 4px;
-        }
-        .private-feature p {
-            font-size: 13.5px;
-            color: var(--gray-600);
-            line-height: 1.7;
-        }
-        /* ==================== HOW IT WORKS ==================== */
-        .works-section {
-            padding: 110px 0;
-        }
-        .works-header {
-            text-align: center;
-            margin-bottom: 70px;
-        }
-        .works-header .section-subtitle {
-            margin: auto;
-        }
-        .works-timeline {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            position: relative;
-        }
-        .works-timeline::before {
-            content: '';
-            position: absolute;
-            top: 50px;
-            left: 16.66%;
-            right: 16.66%;
-            height: 1.5px;
-            background: linear-gradient(to right, var(--gold), var(--gold-light), var(--gold));
-            opacity: 0.3;
-        }
-        .work-step {
-            text-align: center;
-            position: relative;
-        }
-        .work-number {
-            width: 52px;
-            height: 52px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 28px;
-            background: var(--white);
-            border: 2px solid var(--gold);
-            border-radius: 50%;
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--gold);
-            position: relative;
-            z-index: 2;
-        }
-        .work-step h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--dark-green);
-            margin-bottom: 12px;
-        }
-        .work-step p {
-            font-size: 14.5px;
-            color: var(--gray-600);
-            line-height: 1.75;
-            max-width: 300px;
-            margin: auto;
-        }
+		/*==================== SERVICES ====================*/
+		.services-section{
+		padding:110px 0;
+		background:var(--cream);
+		}
+		.services-header{
+		text-align:center;
+		margin-bottom:70px;
+		}
+		.services-header .section-subtitle{
+		margin:auto;
+		max-width:700px;
+		}
+		.services-grid{
+		display:grid;
+		grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+		gap:28px;
+		}
+		.service-card{
+		background:white;
+		border:1px solid var(--gray-200);
+		border-radius:22px;
+		padding:38px 32px;
+		transition:.35s;
+		position:relative;
+		overflow:hidden;
+		}
+		.service-card::before{
+		content:"";
+		position:absolute;
+		left:0;
+		top:0;
+		width:100%;
+		height:3px;
+		background:var(--gold);
+		transform:scaleX(0);
+		transition:.35s;
+		}
+		.service-card:hover{
+		transform:translateY(-8px);
+		box-shadow:0 18px 40px rgba(0,0,0,.08);
+		border-color:transparent;
+		}
+		.service-card:hover::before{
+		transform:scaleX(1);
+		}
+		.service-icon{
+		width:60px;
+		height:60px;
+		border-radius:16px;
+		display:flex;
+		align-items:center;
+		justify-content:center;
+		background:linear-gradient(
+		135deg,
+		rgba(201,168,76,.15),
+		rgba(201,168,76,.05)
+		);
+		color:var(--gold);
+		font-size:24px;
+		margin-bottom:24px;
+		}
+		.service-card h3{
+		font-family:'Playfair Display',serif;
+		font-size:22px;
+		color:var(--dark-green);
+		margin-bottom:12px;
+		}
+		.service-card p{
+		font-size:14.5px;
+		color:var(--gray-600);
+		line-height:1.8;
+		}
         /* ==================== DOKUMENTASI ==================== */
         .docs-section {
             padding: 110px 0;
@@ -920,10 +853,9 @@
             </a>
             <ul class="nav-links">
                 <li><a href="#about">Kenapa Marhaba</a></li>
-                <li><a href="#private">Umrah Private</a></li>
-                <li><a href="#works">Proses Kami</a></li>
+                <li><a href="#services">Layanan Kami</a></li>
                 <li><a href="#docs">Dokumentasi</a></li>
-                <li><a href="#umrah" class="nav-cta">Mau Umrah</a></li>
+                <li><a href="#umrah" class="nav-cta">Kontak Kami</a></li>
             </ul>
             <div class="hamburger" id="hamburger">
                 <span></span>
@@ -937,10 +869,9 @@
     <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu">
         <a href="#about" class="mobile-link">Kenapa Marhaba</a>
-        <a href="#private" class="mobile-link">Umrah Private</a>
-        <a href="#works" class="mobile-link">Proses Kami</a>
+        <a href="#services" class="mobile-link">Layanan Kami</a>
         <a href="#docs" class="mobile-link">Dokumentasi</a>
-        <a href="#umrah" class="mobile-link" style="color: var(--gold); border: none; margin-top: 16px;">Mau Umrah</a>
+        <a href="#umrah" class="mobile-link" style="color: var(--gold); border: none; margin-top: 16px;">Kontak Kami</a>
     </div>
     <!-- Hero Section -->
     <section class="hero">
@@ -948,7 +879,7 @@
         <div class="container hero-content">
             <div class="hero-badge">Marhaba Umrah Service</div>
             <h1>Menemani Tamu Allah<br>di <em>Setiap Langkah</em></h1>
-            <p class="hero-desc">Marhaba membangun pengalaman umrah yang lebih personal melalui model <strong>Project-Based Private Umrah</strong>. Merancang perjalanan ibadah sesuai kebutuhan setiap keluarga.</p>
+            <p class="hero-desc">Marhaba menghadirkan layanan umrah yang lebih personal melalui <strong>paket umrah, ground handling, muthawif</strong>, hingga berbagai kebutuhan operasional di Arab Saudi.</p>
             <div class="hero-actions">
                 <a href="#about" class="btn-primary">Pelajari Lebih Lanjut <i class="fas fa-arrow-right" style="font-size:12px;"></i></a>
                 <a href="#docs" class="btn-ghost"><i class="fas fa-play" style="font-size:11px;"></i> Potret Perjalanan Kami</a>
@@ -969,7 +900,7 @@
             <div class="why-grid">
                 <div class="why-card reveal reveal-delay-1">
                     <div class="why-icon"><i class="fas fa-user-shield"></i></div>
-                    <h3>Program Fleksibel</h3>
+                    <h3>Solusi Umrah Menyeluruh</h3>
                     <p>Setiap keberangkatan umrah, jadwal perjalanan dan jumlah pax dibuat berdasarkan kebutuhan jamaah.</p>
                 </div>
                 <div class="why-card reveal reveal-delay-2">
@@ -986,83 +917,60 @@
         </div>
     </section>
     <!-- Private Umrah Section -->
-    <section class="private-section" id="private">
-        <div class="container">
-            <div class="private-grid">
-                <div class="private-image reveal">
-                    <img src="marhabadisplay.webp" alt="Private Umrah Experience">
-                    <div class="private-image-badge">
-                        <i class="fas fa-gem"></i>
-                        Umrah Private
-                    </div>
-                </div>
-                <div class="private-content">
-                    <div class="reveal">
-                        <div class="section-label">Layanan Kami</div>
-                        <h2 class="section-title">Umrah Private<br>Menyeluruh</h2>
-                        <p class="section-subtitle">Kami merancang perjalanan umrah yang sepenuhnya disesuaikan dengan kebutuhan, preferensi, dan kenyamanan keluarga Anda dari awal hingga kembali ke tanah air.</p>
-                    </div>
-                    <div class="private-features">
-                        <div class="private-feature reveal reveal-delay-1">
-                            <div class="private-feature-icon"><i class="fas fa-plane"></i></div>
-                            <div>
-                                <h4>Maskapai Terpilih</h4>
-                                <p>Pilihan maskapai dan jadwal penerbangan yang sesuai dengan kenyamanan keluarga Anda.</p>
-                            </div>
-                        </div>
-                        <div class="private-feature reveal reveal-delay-2">
-                            <div class="private-feature-icon"><i class="fas fa-hotel"></i></div>
-                            <div>
-                                <h4>Akomodasi Sesuka Anda</h4>
-                                <p>Hotel berkualitas dengan lokasi strategis dekat Masjidil Haram dan Masjid Nabawi.</p>
-                            </div>
-                        </div>
-                        <div class="private-feature reveal reveal-delay-3">
-                            <div class="private-feature-icon"><i class="fas fa-calendar-check"></i></div>
-                            <div>
-                                <h4>Itinerary Fleksibel</h4>
-                                <p>Jadwal perjalanan dirancang sesuai keinginan, tanpa terikat grup besar.</p>
-                            </div>
-                        </div>
-                        <div class="private-feature reveal reveal-delay-4">
-                            <div class="private-feature-icon"><i class="fas fa-concierge-bell"></i></div>
-                            <div>
-                                <h4>Muthawwif Berpengalaman</h4>
-                                <p>Pendamping ibadah profesional yang menemani Anda di setiap langkah ritual umrah.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- How It Works Section -->
-    <section class="works-section" id="works">
-        <div class="container">
-            <div class="works-header reveal">
-                <div class="section-label">Proses Kami</div>
-                <h2 class="section-title">Bagaimana Kita Bekerja</h2>
-                <p class="section-subtitle">Tiga langkah mudah untuk mewujudkan perjalanan umrah impian Anda bersama keluarga.</p>
-            </div>
-            <div class="works-timeline">
-                <div class="work-step reveal reveal-delay-1">
-                    <div class="work-number">01</div>
-                    <h3>Konsultasi</h3>
-                    <p>Memahami kebutuhan jamaah dan keluarga melalui diskusi mendalam.</p>
-                </div>
-                <div class="work-step reveal reveal-delay-2">
-                    <div class="work-number">02</div>
-                    <h3>Desain Perjalanan</h3>
-                    <p>Menyusun itinerary, hotel, maskapai, transportasi, dan layanan sesuai permintaan.</p>
-                </div>
-                <div class="work-step reveal reveal-delay-3">
-                    <div class="work-number">03</div>
-                    <h3>Bimbingan Maksimal</h3>
-                    <p>Pendampingan sejak persiapan hingga kembali ke Indonesia dengan aman.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    <section class="services-section" id="services">
+		<div class="container">
+			<div class="services-header reveal">
+				<div class="section-label">
+				Layanan Kami
+				</div>
+				<h2 class="section-title">
+				Semua Kebutuhan Umrah<br>
+				 dalam Satu Tempat
+				</h2>
+				<p class="section-subtitle">
+				Marhaba menghadirkan berbagai layanan yang dapat digunakan secara terpisah maupun dikombinasikan sesuai kebutuhan jamaah maupun travel.
+				</p>
+			</div>
+			<div class="services-grid">
+				<div class="service-card reveal reveal-delay-1">
+					<div class="service-icon">
+					<i class="fas fa-kaaba"></i>
+					</div>
+					<h3>Paket Umrah</h3>
+					<p>
+					Bangun paket umrah sesuai kebutuhan Anda. Tentukan sendiri maskapai, hotel, durasi, hingga itinerary perjalanan.
+					</p>
+				</div>
+				<div class="service-card reveal reveal-delay-2">
+					<div class="service-icon">
+					<i class="fas fa-microphone"></i>
+					</div>
+					<h3>Audio Transmitter</h3>
+					<p>
+					Penyewaan audio transmitter berkualitas tinggi agar penyampaian materi muthawif tetap jelas selama ibadah maupun city tour.
+					</p>
+				</div>
+				<div class="service-card reveal reveal-delay-3">
+					<div class="service-icon">
+					<i class="fas fa-handshake"></i>
+					</div>
+					<h3>Ground Handling</h3>
+					<p>
+					Ground handling profesional untuk travel umrah Indonesia mulai dari penjemputan, check-in & out hotel, transportasi hingga koordinasi operasional.
+					</p>
+				</div>
+				<div class="service-card reveal">
+					<div class="service-icon">
+					<i class="fas fa-user-tie"></i>
+					</div>
+					<h3>Muthawif</h3>
+					<p>
+					Pendamping ibadah berpengalaman yang siap menemani jamaah selama perjalanan umrah dengan pelayanan profesional.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
     <!-- Dokumentasi Section -->
     <section class="docs-section" id="docs">
         <div class="container">
@@ -1115,10 +1023,10 @@
     <section class="vision-section" id="umrah">
         <div class="container">
             <div class="vision-inner reveal">
-                <div class="section-label" style="justify-content: center;">Umrah Bersama Kami</div>
+                <div class="section-label" style="justify-content: center;">Mari Bangun Perjalanan Umrah yang Tepat</div>
                 <h2 class="section-title">Bangun Bersama<br>Program Umrah Impian Anda</h2>
                 <p>Kami membangun kepercayaan melalui pelayanan yang personal, transparan, dan penuh pendampingan. Karena setiap tamu Allah berhak mendapatkan perjalanan yang dirancang khusus dan spesial.</p>
-                <a href="https://wa.me/966507845041" target="blank" class="btn-dark">Umrah Bersama Kami <i class="fas fa-arrow-right" style="font-size:12px;"></i></a>
+                <a href="https://wa.me/966507845041" target="blank" class="btn-dark">Diskusikan Kebutuhan Umrah Anda<i class="fas fa-arrow-right" style="font-size:12px;"></i></a>
             </div>
         </div>
     </section>
@@ -1133,7 +1041,7 @@
                 <div class="footer-col sosmed-col">
                     <h4>Sosial Media</h4>
                     <ul>
-                        <li><a href="https://instagram.com/marhabaservice.id" target="blank"><i class="fab fa-instagram"></i> Instagram</a></li>
+                        <li><a href="https://instagram.com/marhabaumrah" target="blank"><i class="fab fa-instagram"></i> Instagram</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
