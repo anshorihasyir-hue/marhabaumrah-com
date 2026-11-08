@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marhaba Handling Form</title>
+<meta name="description" content="Pesan ground handling, check-in/out hotel dan transportasi umrah bersama Marhaba.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#0f3d2e; --green-2:#165a43; --gold:#c9a24b; --gold-soft:#f3e7c6;
+  --cream:#faf6ec; --ink:#1b2a24; --muted:#6b7a72; --line:#e6dfcc; --card:#ffffff;
+  --radius:18px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:"DM Sans",system-ui,sans-serif;color:var(--ink);background:var(--cream);line-height:1.55}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;margin:0;line-height:1.15}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header.nav{position:sticky;top:0;z-index:20;background:rgba(250,246,236,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+header.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{font-family:"Cormorant Garamond",serif;font-weight:700;font-size:26px;color:var(--green);letter-spacing:.5px;text-decoration:none}
+.brand span{color:var(--gold)}
+.nav a.link{color:var(--green);text-decoration:none;font-weight:500;font-size:14px}
+.hero{background:linear-gradient(160deg,var(--green) 0%,var(--green-2) 100%);color:#fff;padding:64px 0 96px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;border-radius:50%;border:1px solid rgba(201,162,75,.35);box-shadow:0 0 0 60px rgba(201,162,75,.06)}
+.eyebrow{color:var(--gold);text-transform:uppercase;letter-spacing:.18em;font-size:12px;font-weight:600;margin-bottom:14px}
+.hero h1{font-size:clamp(36px,6vw,60px);font-weight:600;max-width:640px}
+.hero h1 em{color:var(--gold);font-weight:500}
+.hero p{max-width:560px;color:#d8e6df;margin:18px 0 0}
+main{margin-top:-56px;position:relative;z-index:2;padding-bottom:56px}
+.grid{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:0 10px 30px rgba(15,61,46,.06);margin-bottom:20px}
+.card h2{font-size:28px;color:var(--green);margin-bottom:4px}
+.card .sub{color:var(--muted);font-size:14px;margin:0 0 18px}
+.step{display:inline-flex;width:26px;height:26px;border-radius:50%;background:var(--gold);color:var(--green);font:700 13px "DM Sans";align-items:center;justify-content:center;margin-right:8px;vertical-align:middle}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:600px){.row{grid-template-columns:1fr}}
+label{display:block;font-size:13px;font-weight:600;color:var(--green);margin:0 0 6px}
+.f{margin-bottom:14px}
+input,select,textarea{width:100%;font:inherit;font-size:15px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fffdf8;color:var(--ink);transition:.15s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,75,.2)}
+textarea{min-height:84px;resize:vertical}
+.hint{font-size:12.5px;color:var(--muted);margin-top:5px}
+.pricebox{background:var(--gold-soft);border-radius:12px;padding:12px 14px;font-size:14px;margin:4px 0 16px;color:var(--green);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pricebox b{font-size:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:13px 24px;font:600 15px "DM Sans";cursor:pointer;transition:.15s}
+.btn.gold{background:var(--gold);color:var(--green)}
+.btn.gold:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.btn.wa{background:#25d366;color:#fff;width:100%;padding:15px;font-size:16px}
+.btn.wa:hover{filter:brightness(1.05)}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.aside{position:sticky;top:84px}
+@media(max-width:900px){.aside{position:static}}
+.cur{display:flex;gap:6px;background:var(--cream);padding:4px;border-radius:999px;margin-bottom:14px;border:1px solid var(--line)}
+.cur button{flex:1;border:0;background:transparent;border-radius:999px;padding:7px;font:600 13px "DM Sans";color:var(--muted);cursor:pointer}
+.cur button.on{background:var(--green);color:#fff}
+.empty{color:var(--muted);font-size:14px;text-align:center;padding:18px 6px;border:1px dashed var(--line);border-radius:12px}
+.item{border-bottom:1px solid var(--line);padding:12px 0;position:relative;padding-right:28px}
+.item:last-child{border-bottom:0}
+.item .t{font-weight:600;font-size:14.5px;color:var(--green)}
+.item .d{font-size:13px;color:var(--muted)}
+.item .p{font-weight:600;font-size:14px;margin-top:2px}
+.item button{position:absolute;right:0;top:10px;border:0;background:none;color:#b3402f;font-size:20px;cursor:pointer;line-height:1}
+.total{display:flex;justify-content:space-between;align-items:baseline;border-top:2px solid var(--gold);margin-top:10px;padding-top:12px}
+.total span{font-weight:600;color:var(--green)}
+.total b{font:700 24px "Cormorant Garamond",serif;color:var(--green)}
+.alt{font-size:12.5px;color:var(--muted);text-align:right;margin-bottom:16px}
+.note{font-size:12.5px;color:var(--muted);margin-top:12px;text-align:center}
+.sync{font-size:12px;color:var(--muted);margin-top:8px}
+footer{background:var(--green);color:#cfe0d8;text-align:center;padding:28px 20px;font-size:13px}
+footer b{font-family:"Cormorant Garamond",serif;font-size:22px;color:#fff;display:block;margin-bottom:4px}
+.err{color:#b3402f;font-size:13px;margin-top:8px;min-height:18px}
+</style>
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="https://marhabaumrah.com">Marhaba Handling Form</a>
+  <a class="link" href="https://marhabaumrah.com">← Kembali ke Website</a>
+</div></header>
+
+<section class="hero"><div class="wrap">
+  <div class="eyebrow">Marhaba Umrah Service</div>
+  <h1>Pesan Layanan <em>Ground Handling</em> dengan Mudah</h1>
+  <p>Pilih layanan, jumlah jamaah, dan jadwal. Estimasi biaya dihitung otomatis, lalu pesanan Anda langsung terkirim lewat WhatsApp ke tim Marhaba.</p>
+</div></section>
+
+<main><div class="wrap grid">
+  <div>
+    <section class="card">
+      <h2><span class="step">1</span>Data Pemesan</h2>
+      <p class="sub">Informasi untuk kami hubungi kembali.</p>
+      <div class="row">
+        <div class="f"><label for="nama">Nama lengkap *</label><input id="nama" placeholder="Nama Anda"></div>
+        <div class="f"><label for="wa">No. WhatsApp *</label><input id="wa" type="tel" inputmode="tel" placeholder="08xxxxxxxxxx"></div>
+      </div>
+      <div class="row">
+        <div class="f"><label for="travel">Nama travel / grup</label><input id="travel" placeholder="Opsional"></div>
+        <div class="f"><label for="tiba">Tanggal tiba di Arab Saudi</label><input id="tiba" type="date"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><span class="step">2</span>Pilih Layanan</h2>
+      <p class="sub">Tambahkan satu atau beberapa layanan ke pesanan Anda.</p>
+      <div class="row">
+        <div class="f"><label for="cat">Kategori</label><select id="cat"></select></div>
+        <div class="f"><label for="prod">Produk</label><select id="prod"></select></div>
+      </div>
+      <div class="row">
+        <div class="f" id="subWrap"><label for="sub">Layanan / rute</label><select id="sub"></select></div>
+        <div class="f"><label for="qty" id="qtyLabel">Jumlah</label><input id="qty" type="number" min="1" value="1" inputmode="numeric"><div class="hint" id="qtyHint"></div></div>
+      </div>
+      <div class="f"><label for="itemNote">Tanggal / jam / keterangan layanan</label><input id="itemNote" placeholder="Contoh: 12 Des 2026, 14.00 WAS, Hotel Anjum"></div>
+      <div class="pricebox"><span id="pbLabel">Harga</span><b id="pbVal">-</b></div>
+      <button class="btn gold" id="add" type="button">+ Tambah ke Pesanan</button>
+      <div class="err" id="err1"></div>
+      <div class="sync" id="sync"></div>
+    </section>
+
+    <section class="card">
+      <h2><span class="step">3</span>Catatan Tambahan</h2>
+      <p class="sub">Opsional, misalnya detail penerbangan, hotel, atau permintaan khusus.</p>
+      <div class="f"><textarea id="catatan" placeholder="Tulis catatan Anda di sini"></textarea></div>
+    </section>
+  </div>
+
+  <aside class="aside">
+    <section class="card">
+      <h2>Ringkasan Pesanan</h2>
+      <p class="sub">Estimasi biaya sesuai database harga Marhaba.</p>
+      <div class="cur" id="cur"></div>
+      <div id="items"></div>
+      <div class="total"><span>Estimasi Total</span><b id="grand">-</b></div>
+      <div class="alt" id="alt"></div>
+      <button class="btn wa" id="send" type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 1.9 17.8L0 24l6.4-1.7A11.8 11.8 0 0 0 12 23.8h0A11.8 11.8 0 0 0 20.5 3.5zM12 21.8a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.8 1 1-3.7-.2-.4a9.8 9.8 0 1 1 8.4 4.7zm5.4-7.3c-.3-.1-1.8-.9-2-1s-.5-.1-.7.1-.8 1-1 1.2-.4.2-.7.1a8 8 0 0 1-4-3.5c-.3-.5.3-.5.9-1.6.1-.2 0-.4 0-.5l-.9-2.1c-.2-.6-.5-.5-.7-.5h-.6a1.1 1.1 0 0 0-.8.4 3.4 3.4 0 0 0-1 2.5 5.9 5.9 0 0 0 1.2 3.1 13.5 13.5 0 0 0 5.2 4.6c1.9.8 2.6.9 3.5.7a3 3 0 0 0 2-1.4 2.5 2.5 0 0 0 .2-1.4c-.1-.1-.3-.2-.6-.3z"/></svg>
+        Kirim Pesanan via WhatsApp
+      </button>
+      <div class="err" id="err2"></div>
+      <p class="note">Harga bersifat estimasi dan akan dikonfirmasi oleh tim Marhaba.</p>
+    </section>
+  </aside>
+</div></main>
+
+<footer><b>Marhaba</b>Menemani Tamu Allah di Setiap Langkah.<br>© 2026 Marhaba Umrah Service</footer>
+
+<script>
+const WA_NUMBER = "6281225001462";
+const SHEET_ID = "1r-b3tWIuCVptdROmqFk3-js9ejFuqtFnLRaGI-Bgnl4";
+const SAR_USD = 3.75, SAR_IDR = 4900;
+
+/* Data cadangan internal lengkap (127 Baris) */
+const EMBED = [
+  ["FULL HANDLING", "Ekonomi", "1 PAX", 1125.0, "/pax"],
+  ["FULL HANDLING", "Ekonomi", "2 PAX", 562.5, "/pax"],
+  ["FULL HANDLING", "Ekonomi", "3 PAX", 375.0, "/pax"],
+  ["FULL HANDLING", "Ekonomi", "4 PAX", 337.5, "/pax"],
+  ["FULL HANDLING", "Ekonomi", "5-9 PAX", 300.0, "/pax"],
+  ["FULL HANDLING", "Ekonomi", "10-14 PAX", 262.5, "/pax"],
+  ["FULL HANDLING", "Ekonomi", "15-19 PAX", 225.0, "/pax"],
+  ["FULL HANDLING", "Ekonomi", "20-24 PAX", 187.5, "/pax"],
+  ["FULL HANDLING", "Ekonomi", "25++ PAX", 150.0, "/pax"],
+  ["FULL HANDLING", "Reguler", "1 PAX", 1500.0, "/pax"],
+  ["FULL HANDLING", "Reguler", "2 PAX", 750.0, "/pax"],
+  ["FULL HANDLING", "Reguler", "3 PAX", 562.5, "/pax"],
+  ["FULL HANDLING", "Reguler", "4 PAX", 412.5, "/pax"],
+  ["FULL HANDLING", "Reguler", "5-9 PAX", 375.0, "/pax"],
+  ["FULL HANDLING", "Reguler", "10-14 PAX", 337.5, "/pax"],
+  ["FULL HANDLING", "Reguler", "15-19 PAX", 300.0, "/pax"],
+  ["FULL HANDLING", "Reguler", "20-24 PAX", 262.5, "/pax"],
+  ["FULL HANDLING", "Reguler", "25++ PAX", 225.0, "/pax"],
+  ["FULL HANDLING", "Eksklusif", "1 PAX", 1875.0, "/pax"],
+  ["FULL HANDLING", "Eksklusif", "2 PAX", 937.5, "/pax"],
+  ["FULL HANDLING", "Eksklusif", "3 PAX", 750.0, "/pax"],
+  ["FULL HANDLING", "Eksklusif", "4 PAX", 562.5, "/pax"],
+  ["FULL HANDLING", "Eksklusif", "5-9 PAX", 487.5, "/pax"],
+  ["FULL HANDLING", "Eksklusif", "10-14 PAX", 412.5, "/pax"],
+  ["FULL HANDLING", "Eksklusif", "15-19 PAX", 337.5, "/pax"],
+  ["FULL HANDLING", "Eksklusif", "20-24 PAX", 300.0, "/pax"],
+  ["FULL HANDLING", "Eksklusif", "25++ PAX", 262.5, "/pax"],
+  ["CHECK-IN/OUT", "Check-in & Out", "Check-in Only", 100, "/group atau hotel"],
+  ["CHECK-IN/OUT", "Check-in & Out", "Check-out Only", 100, "/group atau hotel"],
+  ["CHECK-IN/OUT", "Check-in & Out", "Check-in + Out", 150, "/group atau hotel"],
+  ["TRANSPORT", "HIACE", "Jeddah - Jeddah Airport", 250, "/vehicle"],
+  ["TRANSPORT", "HIACE", "Jeddah Airport - Jeddah", 250, "/vehicle"],
+  ["TRANSPORT", "HIACE", "Mekkah - Jeddah", 400, "/vehicle"],
+  ["TRANSPORT", "HIACE", "Jeddah - Mekkah", 400, "/vehicle"],
+  ["TRANSPORT", "HIACE", "Mekkah - Thaif", 450, "/vehicle"],
+  ["TRANSPORT", "HIACE", "Thaif - Mekkah", 450, "/vehicle"],
+  ["TRANSPORT", "HIACE", "Mekkah - Madinah", 900, "/vehicle"],
+  ["TRANSPORT", "HIACE", "Madinah - Mekkah", 900, "/vehicle"],
+  ["TRANSPORT", "HIACE", "Jeddah - Madinah", 900, "/vehicle"],
+  ["TRANSPORT", "HIACE", "Madinah - Jeddah", 900, "/vehicle"],
+  ["TRANSPORT", "HIACE", "Madinah Airport - Madinah", 350, "/vehicle"],
+  ["TRANSPORT", "HIACE", "Madinah - Madinah Airport", 350, "/vehicle"],
+  ["TRANSPORT", "HIACE", "City Tour Mekkah", 450, "/vehicle"],
+  ["TRANSPORT", "HIACE", "City Tour Madinah", 450, "/vehicle"],
+  ["TRANSPORT", "HIACE", "Madinah - Madinah Train", 350, "/vehicle"],
+  ["TRANSPORT", "HIACE", "Mekkah - Mekkah Train", 350, "/vehicle"],
+  ["TRANSPORT", "HIACE", "Full Package", 3000, "/vehicle"],
+  ["TRANSPORT", "HIACE", "Full Package + Thaif", 3600, "/vehicle"],
+  ["TRANSPORT", "STARIA", "Jeddah - Jeddah Airport", 200, "/vehicle"],
+  ["TRANSPORT", "STARIA", "Jeddah Airport - Jeddah", 200, "/vehicle"],
+  ["TRANSPORT", "STARIA", "Mekkah - Jeddah", 300, "/vehicle"],
+  ["TRANSPORT", "STARIA", "Jeddah - Mekkah", 300, "/vehicle"],
+  ["TRANSPORT", "STARIA", "Mekkah - Thaif", 400, "/vehicle"],
+  ["TRANSPORT", "STARIA", "Thaif - Mekkah", 400, "/vehicle"],
+  ["TRANSPORT", "STARIA", "Mekkah - Madinah", 750, "/vehicle"],
+  ["TRANSPORT", "STARIA", "Madinah - Mekkah", 750, "/vehicle"],
+  ["TRANSPORT", "STARIA", "Jeddah - Madinah", 750, "/vehicle"],
+  ["TRANSPORT", "STARIA", "Madinah - Jeddah", 750, "/vehicle"],
+  ["TRANSPORT", "STARIA", "Madinah Airport - Madinah", 200, "/vehicle"],
+  ["TRANSPORT", "STARIA", "Madinah - Madinah Airport", 200, "/vehicle"],
+  ["TRANSPORT", "STARIA", "City Tour Mekkah", 300, "/vehicle"],
+  ["TRANSPORT", "STARIA", "City Tour Madinah", 300, "/vehicle"],
+  ["TRANSPORT", "STARIA", "Madinah - Madinah Train", 200, "/vehicle"],
+  ["TRANSPORT", "STARIA", "Mekkah - Mekkah Train", 200, "/vehicle"],
+  ["TRANSPORT", "STARIA", "Full Package", 2000, "/vehicle"],
+  ["TRANSPORT", "STARIA", "Full Package + Thaif", 2400, "/vehicle"],
+  ["TRANSPORT", "GMC", "Jeddah - Jeddah Airport", 300, "/vehicle"],
+  ["TRANSPORT", "GMC", "Jeddah Airport - Jeddah", 300, "/vehicle"],
+  ["TRANSPORT", "GMC", "Mekkah - Jeddah", 400, "/vehicle"],
+  ["TRANSPORT", "GMC", "Jeddah - Mekkah", 400, "/vehicle"],
+  ["TRANSPORT", "GMC", "Mekkah - Thaif", 500, "/vehicle"],
+  ["TRANSPORT", "GMC", "Thaif - Mekkah", 500, "/vehicle"],
+  ["TRANSPORT", "GMC", "Mekkah - Madinah", 1200, "/vehicle"],
+  ["TRANSPORT", "GMC", "Madinah - Mekkah", 1200, "/vehicle"],
+  ["TRANSPORT", "GMC", "Jeddah - Madinah", 1200, "/vehicle"],
+  ["TRANSPORT", "GMC", "Madinah - Jeddah", 1200, "/vehicle"],
+  ["TRANSPORT", "GMC", "Madinah Airport - Madinah", 300, "/vehicle"],
+  ["TRANSPORT", "GMC", "Madinah - Madinah Airport", 300, "/vehicle"],
+  ["TRANSPORT", "GMC", "City Tour Mekkah", 450, "/vehicle"],
+  ["TRANSPORT", "GMC", "City Tour Madinah", 450, "/vehicle"],
+  ["TRANSPORT", "GMC", "Madinah - Madinah Train", 400, "/vehicle"],
+  ["TRANSPORT", "GMC", "Mekkah - Mekkah Train", 400, "/vehicle"],
+  ["TRANSPORT", "GMC", "Full Package", 3600, "/vehicle"],
+  ["TRANSPORT", "GMC", "Full Package + Thaif", 4200, "/vehicle"],
+  ["TRANSPORT", "BUS", "Jeddah - Jeddah Airport", 250, "/vehicle"],
+  ["TRANSPORT", "BUS", "Jeddah Airport - Jeddah", 250, "/vehicle"],
+  ["TRANSPORT", "BUS", "Mekkah - Jeddah", 400, "/vehicle"],
+  ["TRANSPORT", "BUS", "Jeddah - Mekkah", 400, "/vehicle"],
+  ["TRANSPORT", "BUS", "Mekkah - Thaif", 450, "/vehicle"],
+  ["TRANSPORT", "BUS", "Thaif - Mekkah", 450, "/vehicle"],
+  ["TRANSPORT", "BUS", "Mekkah - Madinah", 900, "/vehicle"],
+  ["TRANSPORT", "BUS", "Madinah - Mekkah", 900, "/vehicle"],
+  ["TRANSPORT", "BUS", "Jeddah - Madinah", 900, "/vehicle"],
+  ["TRANSPORT", "BUS", "Madinah - Jeddah", 900, "/vehicle"],
+  ["TRANSPORT", "BUS", "Madinah Airport - Madinah", 350, "/vehicle"],
+  ["TRANSPORT", "BUS", "Madinah - Madinah Airport", 350, "/vehicle"],
+  ["TRANSPORT", "BUS", "City Tour Mekkah", 450, "/vehicle"],
+  ["TRANSPORT", "BUS", "City Tour Madinah", 450, "/vehicle"],
+  ["TRANSPORT", "BUS", "Madinah - Madinah Train", 350, "/vehicle"],
+  ["TRANSPORT", "BUS", "Mekkah - Mekkah Train", 350, "/vehicle"],
+  ["TRANSPORT", "BUS", "Full Package", 3200, "/vehicle"],
+  ["TRANSPORT", "BUS", "Full Package + Thaif", 3800, "/vehicle"],
+  ["VIP HANDLING", "VIP Airport", "Jeddah Airport (KAIA) - Fast Track", 150, "/pax"],
+  ["VIP HANDLING", "VIP Airport", "Madinah Airport (MED) - Fast Track", 150, "/pax"],
+  ["VIP HANDLING", "Lounge", "King Abdulaziz Airport Lounge Access", 45, "/pax"],
+  ["VIP HANDLING", "Lounge", "Prince Mohammad Airport Lounge Access", 45, "/pax"],
+  ["KURSI RODA", "Wheelchair Service", "Mekkah (Masjidil Haram) - Per Shift", 120, "/pax"],
+  ["KURSI RODA", "Wheelchair Service", "Madinah (Masjid Nabawi) - Per Shift", 120, "/pax"],
+  ["KURSI RODA", "Wheelchair Service", "Full Day Assistance (Mekkah/Madinah)", 250, "/pax"],
+  ["MUTHAWIF", "Muthawwif", "Muthawif - Per Hari", 250, "/hari"],
+  ["HOTEL SUPPORT", "Bagasi", "Handling Bagasi Hotel (Check-in/Out)", 75, "/group"],
+  ["HOTEL SUPPORT", "Laundry", "Express Laundry Service Bagging", 50, "/group"]
+];
+
+const mk = r => ({cat:r[0], prod:r[1], sub:r[2], sar:r[3], usd:r[3]/SAR_USD, idr:r[3]*SAR_IDR, unit:r[4]});
+let DB = EMBED.map(mk);
+let cur = "IDR";
+let items = [];
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const nf = new Intl.NumberFormat("id-ID");
+const money = (r, c = cur) => c === "IDR" ? "Rp " + nf.format(Math.round(r.idr))
+  : c === "SAR" ? "SAR " + nf.format(+r.sar.toFixed(2))
+  : "USD " + nf.format(+r.usd.toFixed(2));
+const totalOf = c => items.reduce((a, i) => ({idr:a.idr + i.row.idr * i.qty, sar:a.sar + i.row.sar * i.qty, usd:a.usd + i.row.usd * i.qty}), {idr:0, sar:0, usd:0});
+const uniq = a => [...new Set(a)];
+const isFH = () => $("cat").value === "FULL HANDLING";
+
+function tierMatch(sub, n) {
+  let m;
+  if ((m = sub.match(/(\d+)\s*-\s*(\d+)/))) return n >= +m[1] && n <= +m[2];
+  if ((m = sub.match(/(\d+)\s*\+\+/))) return n >= +m[1];
+  if ((m = sub.match(/^(\d+)/))) return n === +m[1];
+  return false;
+}
+const unitText = u => u.includes("pax") ? "pax" : u.includes("vehicle") ? "kendaraan" : "group/hotel";
+
+function fillCat() {
+  $("cat").innerHTML = uniq(DB.map(r => r.cat)).map(c => `<option>${esc(c)}</option>`).join("");
+  fillProd();
+}
+function fillProd() {
+  const c = $("cat").value;
+  $("prod").innerHTML = uniq(DB.filter(r => r.cat === c).map(r => r.prod)).map(p => `<option>${esc(p)}</option>`).join("");
+  fillSub();
+}
+function fillSub() {
+  const rows = DB.filter(r => r.cat === $("cat").value && r.prod === $("prod").value);
+  $("subWrap").style.display = isFH() ? "none" : "";
+  $("sub").innerHTML = rows.map((r, i) => `<option value="${i}">${esc(r.sub)}</option>`).join("");
+  refresh();
+}
+function current() {
+  const rows = DB.filter(r => r.cat === $("cat").value && r.prod === $("prod").value);
+  const qty = Math.max(1, parseInt($("qty").value) || 1);
+  if (isFH()) return {row: rows.find(r => tierMatch(r.sub, qty)) || null, qty, rows};
+  return {row: rows[+$("sub").value] || null, qty, rows};
+}
+function refresh() {
+  const {row, qty} = current();
+  const fh = isFH();
+  $("qtyLabel").textContent = fh ? "Jumlah jamaah (pax)" : (row && row.unit.includes("vehicle") ? "Jumlah kendaraan" : "Jumlah group / hotel");
+  $("qtyHint").textContent = fh && row ? "Paket otomatis: " + row.sub : "";
+  if (!row) { $("pbLabel").textContent = "Harga"; $("pbVal").textContent = "-"; return; }
+  const u = unitText(row.unit);
+  $("pbLabel").textContent = `${money(row)} ${row.unit.trim()} × ${qty} ${u}`;
+  $("pbVal").textContent = money({idr:row.idr * qty, sar:row.sar * qty, usd:row.usd * qty});
+}
+
+function renderCur() {
+  $("cur").innerHTML = ["IDR", "SAR", "USD"].map(c => `<button type="button" class="${c === cur ? "on" : ""}" data-c="${c}">${c}</button>`).join("");
+  $("cur").querySelectorAll("button").forEach(b => b.onclick = () => { cur = b.dataset.c; renderCur(); renderItems(); refresh(); });
+}
+function renderItems() {
+  const box = $("items");
+  if (!items.length) box.innerHTML = '<div class="empty">Belum ada layanan dipilih.</div>';
+  else box.innerHTML = items.map((i, k) => {
+    const r = i.row, sub = {idr:r.idr * i.qty, sar:r.sar * i.qty, usd:r.usd * i.qty};
+    return `<div class="item"><div class="t">${esc(r.cat === "FULL HANDLING" ? "Full Handling " + r.prod : r.cat === "TRANSPORT" ? r.prod + " · " + r.sub : r.sub)}</div>
+      <div class="d">${r.cat === "FULL HANDLING" ? esc(r.sub) + " · " : ""}${i.qty} ${unitText(r.unit)} × ${money(r)}${i.note ? "<br>" + esc(i.note) : ""}</div>
+      <div class="p">${money(sub)}</div><button type="button" data-k="${k}" aria-label="Hapus">×</button></div>`;
+  }).join("");
+  box.querySelectorAll("button").forEach(b => b.onclick = () => { items.splice(+b.dataset.k, 1); renderItems(); });
+  const t = totalOf();
+  $("grand").textContent = items.length ? money(t) : "-";
+  $("alt").textContent = items.length ? ["IDR", "SAR", "USD"].filter(c => c !== cur).map(c => money(t, c)).join("  ·  ") : "";
+}
+
+$("cat").onchange = fillProd; $("prod").onchange = fillSub; $("sub").onchange = refresh; $("qty").oninput = refresh;
+$("add").onclick = () => {
+  const {row, qty} = current();
+  $("err1").textContent = "";
+  if (!row) { $("err1").textContent = "Layanan tidak ditemukan, silakan pilih ulang."; return; }
+  items.push({row, qty, note: $("itemNote").value.trim()});
+  $("itemNote").value = ""; $("qty").value = 1; refresh(); renderItems();
+};
+
+$("send").onclick = () => {
+  const nama = $("nama").value.trim(), wa = $("wa").value.trim();
+  $("err2").textContent = "";
+  if (!nama || !wa) { $("err2").textContent = "Mohon lengkapi nama dan nomor WhatsApp."; (nama ? $("wa") : $("nama")).focus(); return; }
+  if (!items.length) { $("err2").textContent = "Tambahkan minimal satu layanan ke pesanan."; return; }
+  const t = totalOf();
+  let m = "Assalamu’alaikum Marhaba Umrah Service 🙏\nSaya ingin melakukan pemesanan layanan berikut:\n\n*DATA PEMESAN*\n";
+  m += `Nama: ${nama}\nNo. WhatsApp: ${wa}\n`;
+  if ($("travel").value.trim()) m += `Travel/Grup: ${$("travel").value.trim()}\n`;
+  if ($("tiba").value) m += `Tanggal tiba: ${new Date($("tiba").value + "T00:00").toLocaleDateString("id-ID", {day:"numeric", month:"long", year:"numeric"})}\n`;
+  m += "\n*DETAIL PESANAN*\n";
+  items.forEach((i, k) => {
+    const r = i.row, sub = {idr:r.idr * i.qty, sar:r.sar * i.qty, usd:r.usd * i.qty};
+    const title = r.cat === "FULL HANDLING" ? `Full Handling ${r.prod} (${r.sub})` : r.cat === "TRANSPORT" ? `Transport ${r.prod}: ${r.sub}` : `${r.cat}: ${r.sub}`;
+    m += `${k + 1}. ${title}\n   Jumlah: ${i.qty} ${unitText(r.unit)} × ${money(r, "IDR")}\n`;
+    if (i.note) m += `   Jadwal/Ket: ${i.note}\n`;
+    m += `   Subtotal: ${money(sub, "IDR")}\n`;
+  });
+  m += `\n*ESTIMASI TOTAL*\n${money(t, "IDR")}\n(${money(t, "SAR")} / ${money(t, "USD")})\n`;
+  if ($("catatan").value.trim()) m += `\n*Catatan:*\n${$("catatan").value.trim()}\n`;
+  m += "\nMohon konfirmasi ketersediaan dan langkah selanjutnya. Jazakumullahu khairan 🙏";
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(m)}`, "_blank");
+};
+
+/* Sinkronisasi data otomatis langsung dari Google Sheet */
+function parseCSV(t) {
+  const rows = []; let r = [], c = "", q = false;
+  for (let i = 0; i < t.length; i++) {
+    const ch = t[i];
+    if (q) { if (ch === '"') { if (t[i + 1] === '"') { c += '"'; i++; } else q = false; } else c += ch; }
+    else if (ch === '"') q = true;
+    else if (ch === ",") { r.push(c); c = ""; }
+    else if (ch === "\n") { r.push(c); rows.push(r); r = []; c = ""; }
+    else if (ch !== "\r") c += ch;
+  }
+  if (c || r.length) { r.push(c); rows.push(r); }
+  return rows;
+}
+const num = s => parseFloat(String(s || "").replace(/,/g, "").replace(/[^0-9.\-]/g, ""));
+async function sync() {
+  try {
+    const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`);
+    if (!res.ok) throw new Error("Gagal mengambil data dari Google Sheet");
+    const rows = parseCSV(await res.text()).slice(1).filter(r => r[0] && r[1] && r[2]);
+    const out = rows.map(r => {
+      let sar = num(r[3]), usd = num(r[4]), idr = num(r[5]);
+      if (isNaN(sar) && !isNaN(usd)) sar = usd * SAR_USD;
+      if (isNaN(sar)) return null;
+      if (isNaN(idr) || idr < sar * 100) idr = sar * SAR_IDR;
+      if (isNaN(usd)) usd = sar / SAR_USD;
+      return {cat:r[0].trim(), prod:r[1].trim(), sub:r[2].trim(), sar, usd, idr, unit:(r[4] && r[4].startsWith("/") ? r[4] : (r[6] || "/pax")).trim()};
+    }).filter(Boolean);
+    if (out.length < 5) throw new Error("Format CSV tidak valid");
+    DB = out; fillCat(); items = []; renderItems();
+    $("sync").textContent = "✓ Harga terhubung dengan database Google Sheet terbaru.";
+  } catch (e) {
+    $("sync").textContent = "• Menggunakan data harga internal (offline).";
+  }
+}
+
+fillCat(); renderCur(); renderItems(); sync();
+</script>
+</body>
+</html>
