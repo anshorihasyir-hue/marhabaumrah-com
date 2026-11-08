@@ -12,7 +12,6 @@
 :root{
   --green:#0f3d2e; --green-2:#165a43; --gold:#c9a24b; --gold-soft:#f3e7c6;
   --cream:#faf6ec; --ink:#1b2a24; --muted:#6b7a72; --line:#e6dfcc; --card:#ffffff;
-  --radius:18px;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -25,7 +24,7 @@ header.nav .wrap{display:flex;align-items:center;justify-content:space-between;h
 .brand span{color:var(--gold)}
 .nav a.link{color:var(--green);text-decoration:none;font-weight:500;font-size:14px}
 .hero{background:linear-gradient(160deg,var(--green) 0%,var(--green-2) 100%);color:#fff;padding:64px 0 96px;position:relative;overflow:hidden}
-.hero::after{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;border-radius:50%;border:1px solid rgba(201,162,75,.35);box-shadow:0 0 0 60px rgba(201,162,75,.06)}
+.hero::after{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;border:1px solid rgba(201,162,75,.35);box-shadow:0 0 0 60px rgba(201,162,75,.06)}
 .eyebrow{color:var(--gold);text-transform:uppercase;letter-spacing:.18em;font-size:12px;font-weight:600;margin-bottom:14px}
 .hero h1{font-size:clamp(36px,6vw,60px);font-weight:600;max-width:640px}
 .hero h1 em{color:var(--gold);font-weight:500}
@@ -36,18 +35,18 @@ main{margin-top:-56px;position:relative;z-index:2;padding-bottom:56px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:0 10px 30px rgba(15,61,46,.06);margin-bottom:20px}
 .card h2{font-size:28px;color:var(--green);margin-bottom:4px}
 .card .sub{color:var(--muted);font-size:14px;margin:0 0 18px}
-.step{display:inline-flex;width:26px;height:26px;border-radius:50%;background:var(--gold);color:var(--green);font:700 13px "DM Sans";align-items:center;justify-content:center;margin-right:8px;vertical-align:middle}
+.step{display:inline-flex;width:26px;height:26px;background:var(--gold);color:var(--green);font:700 13px "DM Sans";align-items:center;justify-content:center;margin-right:8px;vertical-align:middle}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:600px){.row{grid-template-columns:1fr}}
 label{display:block;font-size:13px;font-weight:600;color:var(--green);margin:0 0 6px}
 .f{margin-bottom:14px}
-input,select,textarea{width:100%;font:inherit;font-size:15px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fffdf8;color:var(--ink);transition:.15s}
+input,select,textarea{width:100%;font:inherit;font-size:15px;padding:12px 14px;border:1px solid var(--line);background:#fffdf8;color:var(--ink);transition:.15s}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,75,.2)}
 textarea{min-height:84px;resize:vertical}
 .hint{font-size:12.5px;color:var(--muted);margin-top:5px}
-.pricebox{background:var(--gold-soft);border-radius:12px;padding:12px 14px;font-size:14px;margin:4px 0 16px;color:var(--green);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pricebox{background:var(--gold-soft);padding:12px 14px;font-size:14px;margin:4px 0 16px;color:var(--green);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .pricebox b{font-size:16px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:13px 24px;font:600 15px "DM Sans";cursor:pointer;transition:.15s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;padding:13px 24px;font:600 15px "DM Sans";cursor:pointer;transition:.15s}
 .btn.gold{background:var(--gold);color:var(--green)}
 .btn.gold:hover{filter:brightness(1.06);transform:translateY(-1px)}
 .btn.wa{background:#25d366;color:#fff;width:100%;padding:15px;font-size:16px}
@@ -55,10 +54,10 @@ textarea{min-height:84px;resize:vertical}
 .btn[disabled]{opacity:.5;cursor:not-allowed}
 .aside{position:sticky;top:84px}
 @media(max-width:900px){.aside{position:static}}
-.cur{display:flex;gap:6px;background:var(--cream);padding:4px;border-radius:999px;margin-bottom:14px;border:1px solid var(--line)}
-.cur button{flex:1;border:0;background:transparent;border-radius:999px;padding:7px;font:600 13px "DM Sans";color:var(--muted);cursor:pointer}
+.cur{display:flex;gap:6px;background:var(--cream);padding:4px;margin-bottom:14px;border:1px solid var(--line)}
+.cur button{flex:1;border:0;background:transparent;padding:7px;font:600 13px "DM Sans";color:var(--muted);cursor:pointer}
 .cur button.on{background:var(--green);color:#fff}
-.empty{color:var(--muted);font-size:14px;text-align:center;padding:18px 6px;border:1px dashed var(--line);border-radius:12px}
+.empty{color:var(--muted);font-size:14px;text-align:center;padding:18px 6px;border:1px dashed var(--line)}
 .item{border-bottom:1px solid var(--line);padding:12px 0;position:relative;padding-right:28px}
 .item:last-child{border-bottom:0}
 .item .t{font-weight:600;font-size:14.5px;color:var(--green)}
@@ -257,16 +256,6 @@ const EMBED = [
   ["TRANSPORT", "BUS", "Mekkah - Mekkah Train", 350, "/vehicle"],
   ["TRANSPORT", "BUS", "Full Package", 3200, "/vehicle"],
   ["TRANSPORT", "BUS", "Full Package + Thaif", 3800, "/vehicle"],
-  ["VIP HANDLING", "VIP Airport", "Jeddah Airport (KAIA) - Fast Track", 150, "/pax"],
-  ["VIP HANDLING", "VIP Airport", "Madinah Airport (MED) - Fast Track", 150, "/pax"],
-  ["VIP HANDLING", "Lounge", "King Abdulaziz Airport Lounge Access", 45, "/pax"],
-  ["VIP HANDLING", "Lounge", "Prince Mohammad Airport Lounge Access", 45, "/pax"],
-  ["KURSI RODA", "Wheelchair Service", "Mekkah (Masjidil Haram) - Per Shift", 120, "/pax"],
-  ["KURSI RODA", "Wheelchair Service", "Madinah (Masjid Nabawi) - Per Shift", 120, "/pax"],
-  ["KURSI RODA", "Wheelchair Service", "Full Day Assistance (Mekkah/Madinah)", 250, "/pax"],
-  ["MUTHAWIF", "Muthawwif", "Muthawif - Per Hari", 250, "/hari"],
-  ["HOTEL SUPPORT", "Bagasi", "Handling Bagasi Hotel (Check-in/Out)", 75, "/group"],
-  ["HOTEL SUPPORT", "Laundry", "Express Laundry Service Bagging", 50, "/group"]
 ];
 
 const mk = r => ({cat:r[0], prod:r[1], sub:r[2], sar:r[3], usd:r[3]/SAR_USD, idr:r[3]*SAR_IDR, unit:r[4]});
@@ -290,7 +279,7 @@ function tierMatch(sub, n) {
   if ((m = sub.match(/^(\d+)/))) return n === +m[1];
   return false;
 }
-const unitText = u => u.includes("pax") ? "pax" : u.includes("vehicle") ? "kendaraan" : "group/hotel";
+const unitText = u => u.includes("pax") ? "pax" : u.includes("vehicle") ? "kendaraan" : "group/hotel/pax";
 
 function fillCat() {
   $("cat").innerHTML = uniq(DB.map(r => r.cat)).map(c => `<option>${esc(c)}</option>`).join("");
@@ -316,7 +305,7 @@ function current() {
 function refresh() {
   const {row, qty} = current();
   const fh = isFH();
-  $("qtyLabel").textContent = fh ? "Jumlah jamaah (pax)" : (row && row.unit.includes("vehicle") ? "Jumlah kendaraan" : "Jumlah group / hotel");
+  $("qtyLabel").textContent = fh ? "Jumlah jamaah (pax)" : (row && row.unit.includes("vehicle") ? "Jumlah kendaraan" : "Jumlah group / hotel / pax");
   $("qtyHint").textContent = fh && row ? "Paket otomatis: " + row.sub : "";
   if (!row) { $("pbLabel").textContent = "Harga"; $("pbVal").textContent = "-"; return; }
   const u = unitText(row.unit);
