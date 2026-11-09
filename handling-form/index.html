@@ -148,6 +148,21 @@ footer { padding: 80px 0 0; background: var(--dark); color: rgba(255,255,255,0.6
   .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
 }
 @media (max-width: 480px) { .container { width: 90%; } }
+/* Memperbesar area klik/sentuh dan kenyamanan input tanggal di HP */
+input[type="date"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  min-height: 48px; /* Standar kenyamanan sentuh (touch target) di mobile */
+  width: 100%;
+}
+
+/* Memperbesar ikon kalender bawaan agar mudah ditekan di HP */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  padding: 8px;
+  transform: scale(1.2); /* Memperbesar ukuran ikon */
+}
 </style>
 </head>
 <body>
@@ -199,7 +214,7 @@ footer { padding: 80px 0 0; background: var(--dark); color: rgba(255,255,255,0.6
         </div>
         <div class="row">
           <div class="f"><label for="travel">Nama travel / grup</label><input id="travel" placeholder="Opsional"></div>
-          <div class="f"><label for="tiba">Tanggal tiba di Arab Saudi</label><input id="tiba" type="date"></div>
+          <div class="f"><label for="tiba">Tanggal tiba di Arab Saudi</label><input id="tiba" type="date" onclick="this.showPicker && this.showPicker()"></div>
         </div>
       </section>
 
