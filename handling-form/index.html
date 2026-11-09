@@ -60,16 +60,6 @@ label{display:block;font-size:13px;font-weight:600;color:var(--green);margin:0 0
 input,select,textarea{width:100%;font:inherit;font-size:15px;padding:12px 14px;border:1px solid var(--line);background:#fffdf8;color:var(--ink);border-radius:8px;transition:.15s}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,75,.2)}
 textarea{min-height:84px;resize:vertical}
-.f,.row>*{min-width:0}
-input[type=date]{-webkit-appearance:none;appearance:none;display:block;min-width:0;max-width:100%;min-height:46px;line-height:1.3;text-align:left;position:relative}
-input[type=date]::-webkit-date-and-time-value{text-align:left;min-height:1.3em;margin:0}
-input[type=date]::-webkit-calendar-picker-indicator{opacity:.6;cursor:pointer}
-.dwrap{position:relative}
-.dwrap .dph{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#9a9a90;font-size:15px;pointer-events:none}
-.dwrap.has .dph{display:none}
-.dwrap:not(.has) input[type=date]{color:transparent}
-.dwrap:not(.has) input[type=date]:focus{color:var(--ink)}
-.dwrap:not(.has) input[type=date]:focus ~ .dph{display:none}
 .hint{font-size:12.5px;color:var(--muted);margin-top:5px}
 .pricebox{background:var(--gold-soft);padding:12px 14px;font-size:14px;margin:4px 0 16px;color:var(--green);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-radius:8px}
 .pricebox b{font-size:16px}
@@ -141,7 +131,7 @@ footer .copy{border-top:1px solid rgba(255,255,255,0.1);max-width:600px;margin:2
         </div>
         <div class="row">
           <div class="f"><label for="travel">Nama travel / grup</label><input id="travel" placeholder="Opsional"></div>
-          <div class="f"><label for="tiba">Tanggal tiba di Arab Saudi</label><div class="dwrap" id="tibaWrap"><input id="tiba" type="date"><span class="dph">Pilih tanggal</span></div></div>
+          <div class="f"><label for="tiba">Tanggal tiba di Arab Saudi</label><input id="tiba" type="date"></div>
         </div>
       </section>
 
@@ -202,7 +192,7 @@ const WA_NUMBER = "6281225001462";
 const SHEET_ID = "1r-b3tWIuCVptdROmqFk3-js9ejFuqtFnLRaGI-Bgnl4";
 const SAR_USD = 3.75, SAR_IDR = 4900;
 
-/* Data cadangan internal lengkap (127 Baris) */
+/* Data cadangan internal */
 const EMBED = [
   ["FULL HANDLING", "Ekonomi", "1 PAX", 1125.0, "/pax"],
   ["FULL HANDLING", "Ekonomi", "2 PAX", 562.5, "/pax"],
@@ -224,13 +214,17 @@ const EMBED = [
   ["FULL HANDLING", "Reguler", "25++ PAX", 225.0, "/pax"],
   ["FULL HANDLING", "Eksklusif", "1 PAX", 1875.0, "/pax"],
   ["FULL HANDLING", "Eksklusif", "2 PAX", 937.5, "/pax"],
-  ["FULL HANDLING", "Eksklusif", "3 PAX", 750.0, "/pax"],
+  ["FULL HANDLING", "Eksklusif", "3 PAX", 750.0, "/pax"],	
   ["FULL HANDLING", "Eksklusif", "4 PAX", 562.5, "/pax"],
   ["FULL HANDLING", "Eksklusif", "5-9 PAX", 487.5, "/pax"],
   ["FULL HANDLING", "Eksklusif", "10-14 PAX", 412.5, "/pax"],
   ["FULL HANDLING", "Eksklusif", "15-19 PAX", 337.5, "/pax"],
   ["FULL HANDLING", "Eksklusif", "20-24 PAX", 300.0, "/pax"],
   ["FULL HANDLING", "Eksklusif", "25++ PAX", 262.5, "/pax"],
+  ["TRANSMITTER", "SEWA HARIAN", "1-19 UNIT", 10, "/unit"],
+  ["TRANSMITTER", "SEWA HARIAN", "20-50 UNIT", 7, "/unit"],
+  ["TRANSMITTER", "SEWA HARIAN", "51-99 UNIT", 6, "/unit"],
+  ["TRANSMITTER", "SEWA HARIAN", "100++ UNIT", 5, "/unit"],
   ["CHECK-IN/OUT", "Check-in & Out", "Check-in Only", 100, "/group atau hotel"],
   ["CHECK-IN/OUT", "Check-in & Out", "Check-out Only", 100, "/group atau hotel"],
   ["CHECK-IN/OUT", "Check-in & Out", "Check-in + Out", 150, "/group atau hotel"],
@@ -322,7 +316,10 @@ const money = (r, c = cur) => c === "IDR" ? "Rp " + nf.format(Math.round(r.idr))
   : "USD " + nf.format(+r.usd.toFixed(2));
 const totalOf = c => items.reduce((a, i) => ({idr:a.idr + i.row.idr * i.qty, sar:a.sar + i.row.sar * i.qty, usd:a.usd + i.row.usd * i.qty}), {idr:0, sar:0, usd:0});
 const uniq = a => [...new Set(a)];
-const isFH = () => $("cat").value === "FULL HANDLING";
+/* Kategori dengan harga bertingkat: harga per unit/pax otomatis menyesuaikan jumlah yang dipesan */
+const TIERED_CATS = ["FULL HANDLING", "TRANSMITTER"];
+const isTieredCat = c => TIERED_CATS.includes(c);
+const isTiered = () => isTieredCat($("cat").value);
 
 function tierMatch(sub, n) {
   let m;
@@ -337,12 +334,14 @@ function unitText(row) {
   if (row.unit.includes("vehicle")) return "kendaraan";
   if (row.unit.includes("muthawif")) return "hari";
   if (row.unit.includes("visa")) return "pax";
+  if (row.unit.includes("unit")) return "unit";
   return "pax";
 }
 
 function quantityLabel(row) {
   if (!row) return "Jumlah";
   if (row.cat === "FULL HANDLING") return "Jumlah jamaah (pax)";
+  if (row.cat === "TRANSMITTER") return "Jumlah unit transmitter";
   if (row.cat === "CHECK-IN/OUT") return "Jumlah grup / hotel";
   if (row.unit.includes("vehicle")) return "Jumlah kendaraan";
   if (row.unit.includes("muthawif")) return "Jumlah hari";
@@ -368,8 +367,7 @@ function fillSub() {
   const selectedProd = $("prod").value;
   const rows = DB.filter(r => r.cat === selectedCat && r.prod === selectedProd);
   
-  const fh = isFH();
-  $("subWrap").style.display = fh ? "none" : "block";
+  $("subWrap").style.display = isTiered() ? "none" : "block";
   $("sub").innerHTML = rows.map((r, i) => `<option value="${i}">${esc(r.sub)}</option>`).join("");
   refresh();
 }
@@ -377,13 +375,13 @@ function fillSub() {
 function current() {
   const rows = DB.filter(r => r.cat === $("cat").value && r.prod === $("prod").value);
   const qty = Math.max(1, Math.floor(Number($("qty").value) || 1));
-  if (isFH()) return {row: rows.find(r => tierMatch(r.sub, qty)) || rows[0] || null, qty, rows};
+  if (isTiered()) return {row: rows.find(r => tierMatch(r.sub, qty)) || rows[0] || null, qty, rows};
   return {row: rows[+$("sub").value] || rows[0] || null, qty, rows};
 }
 
 function refresh() {
   const {row, qty} = current();
-  const fh = isFH();
+  const tiered = isTiered();
   if (!row) { 
     $("qtyLabel").textContent = "Jumlah";
     $("qtyHint").textContent = "";
@@ -395,7 +393,7 @@ function refresh() {
   $("qtyLabel").textContent = quantityLabel(row);
   $("qtyHint").textContent = row.cat === "CHECK-IN/OUT"
     ? "Isi jumlah grup atau hotel yang membutuhkan layanan check-in / check-out."
-    : fh ? "Paket otomatis berdasarkan jumlah jamaah: " + row.sub : "";
+    : tiered ? (row.cat === "TRANSMITTER" ? "Harga otomatis menyesuaikan jumlah unit: " : "Paket otomatis berdasarkan jumlah jamaah: ") + row.sub : "";
   
   const u = unitText(row);
   $("pbLabel").textContent = `${money(row)} ${row.unit.trim()} × ${qty} ${u}`;
@@ -412,8 +410,8 @@ function renderItems() {
   if (!items.length) box.innerHTML = '<div class="empty">Belum ada layanan dipilih.</div>';
   else box.innerHTML = items.map((i, k) => {
     const r = i.row, sub = {idr:r.idr * i.qty, sar:r.sar * i.qty, usd:r.usd * i.qty};
-    return `<div class="item"><div class="t">${esc(r.cat === "FULL HANDLING" ? "Full Handling " + r.prod : r.cat === "TRANSPORT" ? r.prod + " · " + r.sub : r.cat === "CHECK-IN/OUT" ? "Check-in / Check-out · " + r.sub : r.sub)}</div>
-      <div class="d">${r.cat === "FULL HANDLING" ? esc(r.sub) + " · " : ""}${i.qty} ${unitText(r)} × ${money(r)}${i.note ? "<br>" + esc(i.note) : ""}</div>
+    return `<div class="item"><div class="t">${esc(r.cat === "FULL HANDLING" ? "Full Handling " + r.prod : r.cat === "TRANSMITTER" ? "Transmitter · " + r.prod : r.cat === "TRANSPORT" ? r.prod + " · " + r.sub : r.cat === "CHECK-IN/OUT" ? "Check-in / Check-out · " + r.sub : r.sub)}</div>
+      <div class="d">${isTieredCat(r.cat) ? esc(r.sub) + " · " : ""}${i.qty} ${unitText(r)} × ${money(r)}${i.note ? "<br>" + esc(i.note) : ""}</div>
       <div class="p">${money(sub)}</div><button type="button" data-k="${k}" aria-label="Hapus">×</button></div>`;
   }).join("");
   box.querySelectorAll("button").forEach(b => b.onclick = () => { items.splice(+b.dataset.k, 1); renderItems(); });
@@ -460,7 +458,7 @@ $("send").onclick = () => {
   m += "\n*DETAIL PESANAN*\n";
   items.forEach((i, k) => {
     const r = i.row, sub = {idr:r.idr * i.qty, sar:r.sar * i.qty, usd:r.usd * i.qty};
-    const title = r.cat === "FULL HANDLING" ? `Full Handling ${r.prod} (${r.sub})` : r.cat === "TRANSPORT" ? `Transport ${r.prod}: ${r.sub}` : r.cat === "CHECK-IN/OUT" ? `Check-in / Check-out: ${r.sub}` : `${r.cat}: ${r.sub}`;
+    const title = r.cat === "FULL HANDLING" ? `Full Handling ${r.prod} (${r.sub})` : r.cat === "TRANSMITTER" ? `Transmitter ${r.prod} (${r.sub})` : r.cat === "TRANSPORT" ? `Transport ${r.prod}: ${r.sub}` : r.cat === "CHECK-IN/OUT" ? `Check-in / Check-out: ${r.sub}` : `${r.cat}: ${r.sub}`;
     m += `${k + 1}. ${title}\n   Jumlah: ${i.qty} ${unitText(r)} × ${money(r, "IDR")}\n`;
     if (i.note) m += `   Jadwal/Ket: ${i.note}\n`;
     m += `   Subtotal: ${money(sub, "IDR")}\n`;
@@ -513,10 +511,6 @@ fillCat();
 renderCur(); 
 renderItems(); 
 sync();
-</script>
-<script>
-(function(){var i=document.getElementById("tiba"),w=document.getElementById("tibaWrap");if(!i||!w)return;
-function u(){w.classList.toggle("has",!!i.value)}["input","change","blur"].forEach(function(e){i.addEventListener(e,u)});u();})();
 </script>
 </body>
 </html>
