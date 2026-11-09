@@ -60,6 +60,16 @@ label{display:block;font-size:13px;font-weight:600;color:var(--green);margin:0 0
 input,select,textarea{width:100%;font:inherit;font-size:15px;padding:12px 14px;border:1px solid var(--line);background:#fffdf8;color:var(--ink);border-radius:8px;transition:.15s}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,75,.2)}
 textarea{min-height:84px;resize:vertical}
+.f,.row>*{min-width:0}
+input[type=date]{-webkit-appearance:none;appearance:none;display:block;min-width:0;max-width:100%;min-height:46px;line-height:1.3;text-align:left;position:relative}
+input[type=date]::-webkit-date-and-time-value{text-align:left;min-height:1.3em;margin:0}
+input[type=date]::-webkit-calendar-picker-indicator{opacity:.6;cursor:pointer}
+.dwrap{position:relative}
+.dwrap .dph{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#9a9a90;font-size:15px;pointer-events:none}
+.dwrap.has .dph{display:none}
+.dwrap:not(.has) input[type=date]{color:transparent}
+.dwrap:not(.has) input[type=date]:focus{color:var(--ink)}
+.dwrap:not(.has) input[type=date]:focus ~ .dph{display:none}
 .hint{font-size:12.5px;color:var(--muted);margin-top:5px}
 .pricebox{background:var(--gold-soft);padding:12px 14px;font-size:14px;margin:4px 0 16px;color:var(--green);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-radius:8px}
 .pricebox b{font-size:16px}
@@ -131,7 +141,7 @@ footer .copy{border-top:1px solid rgba(255,255,255,0.1);max-width:600px;margin:2
         </div>
         <div class="row">
           <div class="f"><label for="travel">Nama travel / grup</label><input id="travel" placeholder="Opsional"></div>
-          <div class="f"><label for="tiba">Tanggal tiba di Arab Saudi</label><input id="tiba" type="date"></div>
+          <div class="f"><label for="tiba">Tanggal tiba di Arab Saudi</label><div class="dwrap" id="tibaWrap"><input id="tiba" type="date"><span class="dph">Pilih tanggal</span></div></div>
         </div>
       </section>
 
@@ -192,7 +202,7 @@ const WA_NUMBER = "6281225001462";
 const SHEET_ID = "1r-b3tWIuCVptdROmqFk3-js9ejFuqtFnLRaGI-Bgnl4";
 const SAR_USD = 3.75, SAR_IDR = 4900;
 
-/* Data cadangan internal lengkap */
+/* Data cadangan internal lengkap (127 Baris) */
 const EMBED = [
   ["FULL HANDLING", "Ekonomi", "1 PAX", 1125.0, "/pax"],
   ["FULL HANDLING", "Ekonomi", "2 PAX", 562.5, "/pax"],
@@ -296,7 +306,7 @@ const EMBED = [
   ["TRANSPORT", "BUS", "Mekkah - Mekkah Train", 350, "/vehicle"],
   ["TRANSPORT", "BUS", "Full Package", 3200, "/vehicle"],
   ["TRANSPORT", "BUS", "Full Package + Thaif", 3800, "/vehicle"],
-  ["MUTHAWIF", "MUTHAWIF", "Full Pendamping", 250, "/muthawif"],
+  ["MUTHAWIF", "MUTHAWIF", "Full Pendambing", 250, "/muthawif"],
   ["VISA", "VISA", "VISA", 450, "/visa"],
 ];
 
@@ -310,7 +320,7 @@ const nf = new Intl.NumberFormat("id-ID");
 const money = (r, c = cur) => c === "IDR" ? "Rp " + nf.format(Math.round(r.idr))
   : c === "SAR" ? "SAR " + nf.format(+r.sar.toFixed(2))
   : "USD " + nf.format(+r.usd.toFixed(2));
-const totalOf = () => items.reduce((a, i) => ({idr:a.idr + i.row.idr * i.qty, sar:a.sar + i.row.sar * i.qty, usd:a.usd + i.row.usd * i.qty}), {idr:0, sar:0, usd:0});
+const totalOf = c => items.reduce((a, i) => ({idr:a.idr + i.row.idr * i.qty, sar:a.sar + i.row.sar * i.qty, usd:a.usd + i.row.usd * i.qty}), {idr:0, sar:0, usd:0});
 const uniq = a => [...new Set(a)];
 const isFH = () => $("cat").value === "FULL HANDLING";
 
@@ -321,38 +331,35 @@ function tierMatch(sub, n) {
   if ((m = sub.match(/^(\d+)/))) return n === +m[1];
   return false;
 }
-
 function unitText(row) {
   if (!row) return "pax";
   if (row.cat === "CHECK-IN/OUT") return "grup/hotel";
   if (row.unit.includes("vehicle")) return "kendaraan";
   if (row.unit.includes("muthawif")) return "hari";
+  if (row.unit.includes("visa")) return "pax";
   return "pax";
 }
 
 function quantityLabel(row) {
   if (!row) return "Jumlah";
-  if (row.cat === "FULL HANDLING" || row.cat === "VISA") return "Jumlah jamaah (pax)";
+  if (row.cat === "FULL HANDLING") return "Jumlah jamaah (pax)";
   if (row.cat === "CHECK-IN/OUT") return "Jumlah grup / hotel";
   if (row.unit.includes("vehicle")) return "Jumlah kendaraan";
   if (row.unit.includes("muthawif")) return "Jumlah hari";
-  return "Jumlah";
+  if (row.unit.includes("visa")) return "Jumlah jamaah (pax)";
+  return "Jumlah jamaah (pax)";
 }
 
 function fillCat() {
   const cats = uniq(DB.map(r => r.cat));
-  const currentCat = $("cat").value;
   $("cat").innerHTML = cats.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join("");
-  if (cats.includes(currentCat)) $("cat").value = currentCat;
   fillProd();
 }
 
 function fillProd() {
   const selectedCat = $("cat").value;
   const prods = uniq(DB.filter(r => r.cat === selectedCat).map(r => r.prod));
-  const currentProd = $("prod").value;
   $("prod").innerHTML = prods.map(p => `<option value="${esc(p)}">${esc(p)}</option>`).join("");
-  if (prods.includes(currentProd)) $("prod").value = currentProd;
   fillSub();
 }
 
@@ -360,6 +367,7 @@ function fillSub() {
   const selectedCat = $("cat").value;
   const selectedProd = $("prod").value;
   const rows = DB.filter(r => r.cat === selectedCat && r.prod === selectedProd);
+  
   const fh = isFH();
   $("subWrap").style.display = fh ? "none" : "block";
   $("sub").innerHTML = rows.map((r, i) => `<option value="${i}">${esc(r.sub)}</option>`).join("");
@@ -386,7 +394,7 @@ function refresh() {
   
   $("qtyLabel").textContent = quantityLabel(row);
   $("qtyHint").textContent = row.cat === "CHECK-IN/OUT"
-    ? "Isi jumlah grup atau hotel."
+    ? "Isi jumlah grup atau hotel yang membutuhkan layanan check-in / check-out."
     : fh ? "Paket otomatis berdasarkan jumlah jamaah: " + row.sub : "";
   
   const u = unitText(row);
@@ -439,7 +447,7 @@ $("send").onclick = () => {
   if (!nama || !wa) { $("err2").textContent = "Mohon lengkapi nama dan nomor WhatsApp."; (nama ? $("wa") : $("nama")).focus(); return; }
   const waDigits = wa.replace(/[^0-9]/g, "");
   if (waDigits.length < 8 || waDigits.length > 15) {
-    $("err2").textContent = "Nomor WhatsApp tidak valid.";
+    $("err2").textContent = "Nomor WhatsApp tidak valid. Periksa kembali nomor yang dimasukkan.";
     $("wa").focus();
     return;
   }
@@ -463,6 +471,7 @@ $("send").onclick = () => {
   window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(m)}`, "_blank");
 };
 
+/* Sinkronisasi data otomatis langsung dari Google Sheet */
 function parseCSV(t) {
   const rows = []; let r = [], c = "", q = false;
   for (let i = 0; i < t.length; i++) {
@@ -477,11 +486,10 @@ function parseCSV(t) {
   return rows;
 }
 const num = s => parseFloat(String(s || "").replace(/,/g, "").replace(/[^0-9.\-]/g, ""));
-
 async function sync() {
   try {
     const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`);
-    if (!res.ok) throw new Error("Gagal mengambil data");
+    if (!res.ok) throw new Error("Gagal mengambil data dari Google Sheet");
     const rows = parseCSV(await res.text()).slice(1).filter(r => r[0] && r[1] && r[2]);
     const out = rows.map(r => {
       let sar = num(r[3]), usd = num(r[4]), idr = num(r[5]);
@@ -491,21 +499,24 @@ async function sync() {
       if (isNaN(usd)) usd = sar / SAR_USD;
       return {cat:r[0].trim(), prod:r[1].trim(), sub:r[2].trim(), sar, usd, idr, unit:(r[6] || "/pax").trim()};
     }).filter(Boolean);
-    if (out.length >= 5) {
-      DB = out; 
-      fillCat(); 
-      $("sync").textContent = "✓ Database Online Terhubung.";
-    }
+    if (out.length < 5) throw new Error("Format CSV tidak valid");
+    DB = out; 
+    fillCat(); 
+    $("sync").textContent = "✓ Database Online.";
   } catch (e) {
-    $("sync").textContent = "• Menggunakan Data Cadangan (Offline).";
+    $("sync").textContent = "• Database Offline (Menggunakan Data Cadangan).";
   }
 }
 
-// Inisialisasi awal langsung berjalan dengan data internal agar responsif instan
+// Inisialisasi awal dijalankan menggunakan EMBED agar form langsung terisi meskipun fetch sheet butuh waktu
 fillCat(); 
 renderCur(); 
 renderItems(); 
 sync();
+</script>
+<script>
+(function(){var i=document.getElementById("tiba"),w=document.getElementById("tibaWrap");if(!i||!w)return;
+function u(){w.classList.toggle("has",!!i.value)}["input","change","blur"].forEach(function(e){i.addEventListener(e,u)});u();})();
 </script>
 </body>
 </html>
